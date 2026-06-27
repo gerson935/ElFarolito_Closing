@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>El Farolito — Closing Statement</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg:      #0a0a0a;
+    --surface: #111111;
+    --border:  #222222;
+    --gold:    #C9952A;
+    --gold-lo: rgba(201,149,42,0.08);
+    --gold-md: rgba(201,149,42,0.18);
+    --green:   #27ae60;
+    --blue:    #2980b9;
+    --purple:  #8e44ad;
+    --text:    #f0f0f0;
+    --muted:   #666;
+    --label:   #999;
+  }
+
+  html, body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  /* ── HEADER ── */
+  .header {
+    padding: 28px 48px 20px;
+    text-align: center;
+    flex-shrink: 0;
+  }
+  .eyebrow {
+    font-size: 11px; font-weight: 600;
+    letter-spacing: .14em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 14px;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+  }
+  .eyebrow::before, .eyebrow::after {
+    content:''; width: 40px; height: 1px; background: var(--gold);
+    opacity: .4;
+  }
+  .headline {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 32px; font-weight: 700;
+    line-height: 1.15; color: var(--text);
+    margin-bottom: 6px;
+  }
+  .headline span { color: var(--gold); }
+  .subline {
+    font-size: 13px; color: var(--muted);
+    letter-spacing: .02em;
+  }
+
+  /* ── PILLARS ── */
+  .pillars {
+    display: flex;
+    gap: 16px;
+    padding: 0 48px;
+    flex: 1;
+    align-items: stretch;
+    overflow: hidden;
+  }
+
+  .pillar {
+    flex: 1;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    transition: border-color .25s, transform .25s;
+    user-select: none;
+  }
+
+  /* locked state */
+  .pillar.locked {
+    opacity: .35;
+    cursor: pointer;
+  }
+  .pillar.locked:hover {
+    opacity: .5;
+  }
+
+  /* revealed state */
+  .pillar.revealed {
+    opacity: 1;
+    cursor: default;
+    animation: cardIn .4s cubic-bezier(.22,1,.36,1) both;
+  }
+  .pillar.revealed:hover { transform: translateY(-3px); }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(16px) scale(.97); }
+    to   { opacity: 1; transform: translateY(0)   scale(1); }
+  }
+
+  /* accent top bar */
+  .pillar::before {
+    content:''; position:absolute; top:0; left:0; right:0; height:3px;
+    border-radius:12px 12px 0 0;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform .35s ease;
+  }
+  .pillar.revealed::before { transform: scaleX(1); }
+
+  .pillar.p1::before { background: var(--gold); }
+  .pillar.p2::before { background: var(--blue); }
+  .pillar.p3::before { background: var(--green); }
+  .pillar.p4::before { background: var(--purple); }
+
+  .pillar.p1.revealed { border-color: rgba(201,149,42,.35); }
+  .pillar.p2.revealed { border-color: rgba(41,128,185,.35); }
+  .pillar.p3.revealed { border-color: rgba(39,174,96,.35); }
+  .pillar.p4.revealed { border-color: rgba(142,68,173,.35); }
+
+  /* lock icon */
+  .lock-icon {
+    position: absolute; top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 28px; opacity: .3;
+    transition: opacity .2s;
+    pointer-events: none;
+  }
+  .pillar.revealed .lock-icon { display: none; }
+
+  /* pillar number */
+  .pillar-num {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 11px; font-weight: 600;
+    letter-spacing: .1em; text-transform: uppercase;
+    margin-bottom: 14px;
+    opacity: 0;
+    transition: opacity .3s .15s;
+  }
+  .pillar.revealed .pillar-num { opacity: 1; }
+  .p1 .pillar-num { color: var(--gold); }
+  .p2 .pillar-num { color: var(--blue); }
+  .p3 .pillar-num { color: var(--green); }
+  .p4 .pillar-num { color: var(--purple); }
+
+  /* icon */
+  .pillar-icon {
+    font-size: 30px; margin-bottom: 12px;
+    opacity: 0; transform: scale(.6);
+    transition: opacity .3s .1s, transform .3s .1s;
+  }
+  .pillar.revealed .pillar-icon { opacity: 1; transform: scale(1); }
+
+  /* title */
+  .pillar-title {
+    font-family: 'Space Grotesk', sans-serif;
+    font-size: 16px; font-weight: 700;
+    color: var(--text); margin-bottom: 10px;
+    opacity: 0; transform: translateY(8px);
+    transition: opacity .3s .2s, transform .3s .2s;
+    line-height: 1.2;
+  }
+  .pillar.revealed .pillar-title { opacity: 1; transform: translateY(0); }
+
+  /* body */
+  .pillar-body {
+    font-size: 12px; color: var(--label);
+    line-height: 1.7;
+    opacity: 0; transform: translateY(6px);
+    transition: opacity .3s .3s, transform .3s .3s;
+    flex: 1;
+  }
+  .pillar.revealed .pillar-body { opacity: 1; transform: translateY(0); }
+  .pillar-body strong { color: var(--text); }
+
+  /* stat badge */
+  .pillar-stat {
+    margin-top: 14px;
+    padding: 8px 12px;
+    border-radius: 6px;
+    font-size: 11px; font-weight: 600;
+    opacity: 0; transform: translateY(4px);
+    transition: opacity .3s .4s, transform .3s .4s;
+    width: 100%;
+  }
+  .pillar.revealed .pillar-stat { opacity: 1; transform: translateY(0); }
+  .p1 .pillar-stat { background: var(--gold-lo); color: var(--gold); border: 1px solid rgba(201,149,42,.2); }
+  .p2 .pillar-stat { background: rgba(41,128,185,.08); color: var(--blue); border: 1px solid rgba(41,128,185,.2); }
+  .p3 .pillar-stat { background: rgba(39,174,96,.08); color: var(--green); border: 1px solid rgba(39,174,96,.2); }
+  .p4 .pillar-stat { background: rgba(142,68,173,.08); color: var(--purple); border: 1px solid rgba(142,68,173,.2); }
+
+  /* ── FOOTER ── */
+  .footer {
+    padding: 18px 48px 22px;
+    flex-shrink: 0;
+    text-align: center;
+  }
+
+  .closing-line {
+    font-size: 13px; color: var(--muted);
+    font-style: italic;
+    opacity: 0;
+    transition: opacity .6s ease;
+    margin-bottom: 12px;
+  }
+  .closing-line.show { opacity: 1; }
+  .closing-line em { color: var(--gold); font-style: normal; font-weight: 600; }
+
+  .team-line {
+    font-size: 11px; color: #333;
+    letter-spacing: .04em;
+    opacity: 0; transition: opacity .6s .3s ease;
+  }
+  .team-line.show { opacity: 1; }
+  .team-line span { color: #444; }
+
+  /* ── HINT ── */
+  .hint {
+    position: fixed; bottom: 14px; right: 20px;
+    font-size: 10px; color: #333;
+    letter-spacing: .05em;
+    pointer-events: none;
+    transition: opacity .4s;
+  }
+  .hint.hide { opacity: 0; }
+
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <div class="eyebrow">Closing Statement</div>
+  <div class="headline">40 years of tradition.<br><span>One plan to make it visible.</span></div>
+  <div class="subline">Click each pillar to reveal why El Farolito will win.</div>
+</div>
+
+<!-- PILLARS -->
+<div class="pillars">
+
+  <div class="pillar p1 locked" id="p1" onclick="reveal(1)">
+    <div class="lock-icon">🔒</div>
+    <div class="pillar-num">01 — Authentic Story</div>
+    <div class="pillar-icon">🏆</div>
+    <div class="pillar-title">An Irreplaceable Brand Narrative</div>
+    <div class="pillar-body">
+      A <strong>40-year unchanged family recipe</strong> from Mala is not a marketing claim — it is a structural competitive advantage. <strong>"Bien taypa" portions</strong> cannot be replicated overnight. El Farolito owns a story no competitor can manufacture.
+    </div>
+    <div class="pillar-stat">40 years · Same recipe · 3,400+ Google reviews already earned</div>
+  </div>
+
+  <div class="pillar p2 locked" id="p2" onclick="reveal(2)">
+    <div class="lock-icon">🔒</div>
+    <div class="pillar-num">02 — Digital Infrastructure</div>
+    <div class="pillar-icon">📱</div>
+    <div class="pillar-title">Built to Last Beyond the Plan</div>
+    <div class="pillar-body">
+      By December 2026: <strong>website live</strong>, GMB at 100%, <strong>TikTok growing</strong>, WhatsApp ordering active, GA4 measuring everything. Assets that don't depreciate — they compound every month after the plan ends.
+    </div>
+    <div class="pillar-stat">6 channels · 3 phases · S/ 17,102 total investment</div>
+  </div>
+
+  <div class="pillar p3 locked" id="p3" onclick="reveal(3)">
+    <div class="lock-icon">🔒</div>
+    <div class="pillar-num">03 — Measurable Results</div>
+    <div class="pillar-icon">📈</div>
+    <div class="pillar-title">5 Objectives. 20 KPIs. Zero Guessing.</div>
+    <div class="pillar-body">
+      Every channel has a target. Every target has a deadline. Every deadline is tracked weekly in a <strong>live Looker Studio dashboard</strong>. Break-even arrives at <strong>Month 9–10</strong> — and compounding returns thereafter.
+    </div>
+    <div class="pillar-stat">OE-1 to OE-5 · Weekly dashboard · Break-even Month 9–10</div>
+  </div>
+
+  <div class="pillar p4 locked" id="p4" onclick="reveal(4)">
+    <div class="lock-icon">🔒</div>
+    <div class="pillar-num">04 — Commission-Free Revenue</div>
+    <div class="pillar-icon">💰</div>
+    <div class="pillar-title">Every Direct Order Saves Money</div>
+    <div class="pillar-body">
+      <strong>80+ WhatsApp orders/month</strong> by December save S/ 810 in Rappi and PedidosYa commissions — every single month, permanently. A direct channel that grows with no additional setup cost.
+    </div>
+    <div class="pillar-stat">80 orders/mo · S/ 10.13 saved per order · 15–20% of delivery volume</div>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <div class="closing-line" id="closingLine">
+    <em>"El Farolito's bottleneck is not product or brand. It's digital invisibility — and this plan solves it."</em>
+  </div>
+  <div class="team-line" id="teamLine">
+    ESAN University · E-Marketing 2026-1 · Section S-005 ·
+    <span>Chumpitaz · Miranda · Raymundo · Sandoval</span>
+  </div>
+</div>
+
+<div class="hint" id="hint">click to reveal →</div>
+
+<script>
+  let revealed = 0;
+  const total = 4;
+
+  function reveal(n) {
+    const el = document.getElementById('p' + n);
+    if (!el.classList.contains('locked')) return;
+    el.classList.remove('locked');
+    el.classList.add('revealed');
+    revealed++;
+
+    // remove onclick once revealed
+    el.onclick = null;
+
+    // unlock next pillar hint
+    const next = document.getElementById('p' + (n + 1));
+    if (next) next.style.opacity = '.45';
+
+    // when all revealed, show closing line + team
+    if (revealed === total) {
+      setTimeout(() => {
+        document.getElementById('closingLine').classList.add('show');
+        document.getElementById('teamLine').classList.add('show');
+        document.getElementById('hint').classList.add('hide');
+      }, 300);
+    }
+  }
+
+  // first pillar starts slightly visible
+  document.getElementById('p1').style.opacity = '.5';
+</script>
+</body>
+</html>
